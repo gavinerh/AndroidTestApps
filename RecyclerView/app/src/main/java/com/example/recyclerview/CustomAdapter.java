@@ -23,9 +23,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomViewHolder> {
     // handling click events
     private ItemClickListener clickListener;
 
-    public CustomAdapter(CountryModel[] listData, Context context) {
+    public CustomAdapter(CountryModel[] listData, Context context, ItemClickListener itemClickListener) {
         this.listData = listData;
         this.context = context;
+        this.clickListener = itemClickListener;
     }
 
     public void setClickListener(ItemClickListener clickListener) {
@@ -39,6 +40,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomViewHolder> {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View listItem = inflater.inflate(R.layout.recycler_view_item,parent,false);
         CustomViewHolder viewHolder = new CustomViewHolder(listItem);
+        viewHolder.setItemClickListener(clickListener);
         return viewHolder;
     }
 

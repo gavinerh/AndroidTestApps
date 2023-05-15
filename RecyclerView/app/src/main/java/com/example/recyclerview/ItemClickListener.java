@@ -5,5 +5,5 @@ import android.view.View;
 import com.example.recyclerview.model.CountryModel;
 
 public interface ItemClickListener {
-    void onClick(CountryModel countryModel);
+    void onClick(int position);
 }

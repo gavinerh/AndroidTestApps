@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         };
 
         // initialise the adapter
-        customAdapter = new CustomAdapter(dataArr, getApplicationContext());
+        customAdapter = new CustomAdapter(dataArr, getApplicationContext(), this);
         // handles click events
         customAdapter.setClickListener(this);
         recyclerView.setHasFixedSize(true);
@@ -46,8 +46,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
 
     @Override
-    public void onClick(CountryModel countryModel) {
+    public void onClick(int position) {
         // implement the onClick here, what to do when the item is clicked
+        CountryModel countryModel = dataArr[position];
         Toast.makeText(this, "Country name selected: " + countryModel.getTitle(), Toast.LENGTH_SHORT).show();
     }
 }
