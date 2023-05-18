@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements CustomClickListen
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(customAdapter);
-
     }
 
     @Override
