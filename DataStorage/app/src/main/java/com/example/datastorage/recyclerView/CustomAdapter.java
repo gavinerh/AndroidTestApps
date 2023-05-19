@@ -8,8 +8,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.example.datastorage.R;
+import com.example.datastorage.dao.UserDao;
+import com.example.datastorage.database.AppDatabase;
 import com.example.datastorage.entity.User;
 
 import java.util.List;
@@ -19,10 +22,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomViewHolder> {
     private List<User> userList;
     Context context;
     private CustomClickListener clickListener;
+    private AppDatabase appDatabase;
+    private DeleteListener deleteListener;
 
-    public CustomAdapter(Context context, List<User> userList, CustomClickListener clickListener) {
+    public CustomAdapter(Context context, List<User> userList, CustomClickListener clickListener, DeleteListener deleteListener) {
         this.clickListener = clickListener;
         this.context = context;
+        this.userList = userList;
+        this.deleteListener = deleteListener;
+    }
+
+    public void setUserList(List<User> userList) {
         this.userList = userList;
     }
 
@@ -33,7 +43,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomViewHolder> {
 
         View cardItem = inflater.inflate(R.layout.card_item,parent, false);
 
-        CustomViewHolder viewHolder = new CustomViewHolder(cardItem);
+        CustomViewHolder viewHolder = new CustomViewHolder(cardItem, deleteListener);
         viewHolder.setCustomClickListener(clickListener);
         return viewHolder;
     }
@@ -49,4 +59,5 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomViewHolder> {
     public int getItemCount() {
         return userList.size();
     }
+
 }

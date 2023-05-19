@@ -5,8 +5,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,27 +22,55 @@ import com.example.datastorage.recyclerView.CustomAdapter;
 import com.example.datastorage.recyclerView.CustomClickListener;
 import com.example.datastorage.recyclerView.DeleteListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class ViewAllUsers extends AppCompatActivity implements CustomClickListener, DeleteListener {
-
-    List<User> userList;
-    RecyclerView recyclerView;
-    CustomAdapter customAdapter;
-    UserDao userDao;
-    TextView emptyMessageTextView;
+public class CombinedActivity extends AppCompatActivity implements CustomClickListener, DeleteListener {
 
     AppDatabase appDatabase;
+    UserDao userDao;
+    RecyclerView recyclerView;
+    TextView textView;
+    List<User> userList;
+    CustomAdapter customAdapter;
+    Button combinedOpenDialogBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_all_users);
+        setContentView(R.layout.activity_combined);
+
+        appDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database-name").build();
+        recyclerView = findViewById(R.id.combinedRecyclerView);
+        textView = findViewById(R.id.combinedViewTextView);
+        combinedOpenDialogBtn = findViewById(R.id.combinedOpenDialog);
+        combinedOpenDialogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCustomDialog();
+            }
+        });
 
         getUsersFromDatabase();
 
+    }
 
+    private void showCustomDialog() {
+        Dialog dialog = new Dialog(CombinedActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.gray);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.add_user_dialog);
+
+        // initialising the views of the dialog
+        final Button addNewUserBtn = dialog.findViewById(R.id.combinedAddNewUserBtn);
+        addNewUserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),AddUser.class);
+                startActivity(intent);
+            }
+        });
+        dialog.show();
     }
 
     private void getUsersFromDatabase() {
@@ -61,23 +94,22 @@ public class ViewAllUsers extends AppCompatActivity implements CustomClickListen
         if(recyclerView == null) {
             recyclerView = findViewById(R.id.recyclerView);
         }
-        if(emptyMessageTextView == null) {
-            emptyMessageTextView = findViewById(R.id.emptyMessage);
+        if(textView == null) {
+            textView = findViewById(R.id.emptyMessage);
         }
         if(!userList.isEmpty()) {
-            emptyMessageTextView.setVisibility(View.GONE);
+            textView.setVisibility(View.GONE);
             if(customAdapter == null) {
-                customAdapter = new CustomAdapter(getApplicationContext(), userList, ViewAllUsers.this, ViewAllUsers.this);
+                customAdapter = new CustomAdapter(getApplicationContext(), userList, CombinedActivity.this, CombinedActivity.this);
             } else {
                 customAdapter.setUserList(userList);
             }
             recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
             recyclerView.setAdapter(customAdapter);
         } else {
-            emptyMessageTextView = findViewById(R.id.emptyMessage);
-            emptyMessageTextView.setText("List is empty");
+            textView.setText("List is empty");
             recyclerView.setVisibility(View.GONE);
-            emptyMessageTextView.setVisibility(View.VISIBLE);
+            textView.setVisibility(View.VISIBLE);
         }
 
     }

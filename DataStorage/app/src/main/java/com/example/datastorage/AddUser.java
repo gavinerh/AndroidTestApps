@@ -49,17 +49,9 @@ public class AddUser extends AppCompatActivity {
                 String firstNameText = firstNameEdit.getText().toString();
                 String lastNameText = lastNameEdit.getText().toString();
                 if(!firstNameText.isEmpty() || !lastNameText.isEmpty()){
-                    String uuid = UUID.randomUUID().toString();
-                    User user = new User();
-                    user.key = uuid;
-                    user.firstName = firstNameText;
-                    user.lastName = lastNameText;
-                    userDao.insertAll(user);
-
-                    create a separate thread for database operations
+                    saveUser(firstNameText,lastNameText);
                 }
-                Toast.makeText(AddUser.this, "User saved", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(),CombinedActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -68,10 +60,30 @@ public class AddUser extends AppCompatActivity {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(),CombinedActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
+    }
+
+    private void saveUser(String firstname, String lastname) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String uuid = UUID.randomUUID().toString();
+                User user = new User();
+                user.key = uuid;
+                user.firstName = firstname;
+                user.lastName = lastname;
+                userDao.insertAll(user);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(AddUser.this, "User saved", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
     }
 }

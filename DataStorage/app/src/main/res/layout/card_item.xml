@@ -16,14 +16,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="First Name: "
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="15dp"
             android:layout_marginStart="10dp"
             />
         <EditText
             android:layout_width="200dp"
-            android:layout_height="100dp"
+            android:layout_height="50dp"
             android:id="@+id/viewFirstName"
-            android:layout_marginStart="150dp"
+            android:layout_marginStart="100dp"
             android:hint="test" />
 
         <TextView
@@ -31,14 +31,23 @@
             android:layout_height="wrap_content"
             android:text="Last Name: "
             android:layout_marginStart="10dp"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="80dp"
             />
         <EditText
             android:layout_width="200dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="120dp"
-            android:layout_marginStart="150dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginStart="100dp"
             android:id="@+id/viewLastName"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/deleteBtn"
+            android:text="Delete"
+            android:backgroundTint="@color/red"
+            android:layout_toEndOf="@+id/viewFirstName"
+            android:layout_marginTop="40dp"/>
 
     </RelativeLayout>
 
